@@ -17,6 +17,7 @@
 mod blend;
 mod blob;
 mod brush;
+mod color;
 mod font;
 mod gradient;
 mod image;
@@ -25,6 +26,7 @@ mod style;
 pub use blend::{BlendMode, Compose, Mix};
 pub use blob::{Blob, WeakBlob};
 pub use brush::{Brush, BrushRef, Extend};
+pub use color::Color;
 pub use font::Font;
 pub use gradient::{ColorStop, ColorStops, ColorStopsSource, Gradient, GradientKind};
 pub use image::{Format, Image};
@@ -32,19 +34,9 @@ pub use image::{Format, Image};
 pub use kurbo;
 /// Re-export of `palette` crate for color management.
 pub use palette;
-use palette::LinSrgba;
 pub use style::{Fill, Style, StyleRef};
 
-/// General-purpose color type. `LinSrgba`
-/// uses a 32-bit float per channel, which ensures
-/// we maintain as much precision as possible before rendering
-/// to accommodate a wide range of output color spaces.
-///
-/// Unless otherwise stated, `peniko` and crates using it
-/// expect colors to be provided unpremultiplied.
-pub type Color = LinSrgba;
-
-/// Predefined color constants.
+/// Useful color constants.
 pub mod colors {
     #[doc(inline)]
     pub use palette::named::*;

@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use super::{Color, Gradient, Image};
-use palette::IntoColor;
 
 /// Describes the color content of a filled or stroked shape.
 ///
@@ -20,10 +19,10 @@ pub enum Brush {
 
 impl<T> From<T> for Brush
 where
-    T: IntoColor<Color>,
+    T: Into<Color>,
 {
     fn from(c: T) -> Self {
-        Self::Solid(c.into_color())
+        Self::Solid(c.into())
     }
 }
 
@@ -100,10 +99,10 @@ impl BrushRef<'_> {
 
 impl<T> From<T> for BrushRef<'_>
 where
-    T: IntoColor<Color>,
+    T: Into<Color>,
 {
     fn from(color: T) -> Self {
-        Self::Solid(color.into_color())
+        Self::Solid(color.into())
     }
 }
 
