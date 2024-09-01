@@ -43,3 +43,9 @@ pub use style::{Fill, Style, StyleRef};
 /// Unless otherwise stated, `peniko` and crates using it
 /// expect colors to be provided unpremultiplied.
 pub type Color = LinSrgba;
+
+/// Predefined color constants.
+pub mod colors {
+    #[doc(inline)]
+    pub use palette::named::*;
+}
