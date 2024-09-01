@@ -24,6 +24,25 @@ impl Default for Color {
 }
 
 impl Color {
+    /// Note: unlike in previous versions of `peniko`,
+    /// components are expected in linear format,
+    /// not sRGB transfer function-encoded.
+    pub const fn rgb(r: f32, g: f32, b: f32) -> Self {
+        Self::rgba(r, g, b, 1.0)
+    }
+
+    /// Note: unlike in previous versions of `peniko`,
+    /// components are expected in linear format,
+    /// not sRGB transfer function-encoded.
+    pub const fn rgba(r: f32, g: f32, b: f32, a: f32) -> Self {
+        Self {
+            red: r,
+            green: g,
+            blue: b,
+            alpha: a,
+        }
+    }
+
     /// Converts a color from sRGB with nonlinear transfer function.
     pub const fn rgb8(r: u8, g: u8, b: u8) -> Self {
         use fast_srgb8::srgb8_to_f32;
