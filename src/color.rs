@@ -73,6 +73,15 @@ impl Color {
             alpha: lerp(self.alpha, other.alpha, t),
         }
     }
+
+    /// Parses a color from a string.
+    ///
+    /// Currently accepts CSS style hexadecimal colors of the forms #RGB, #RGBA,
+    /// #RRGGBB, #RRGGBBAA or the name of an SVG color such as "aliceblue".
+    #[must_use]
+    pub fn parse(s: &str) -> Option<Self> {
+        parse_color(s)
+    }
 }
 
 fn lerp(a: f32, b: f32, t: f32) -> f32 {
@@ -440,4 +449,201 @@ impl Color {
     pub const YELLOW: Color = Color::rgb8(255, 255, 0);
     /// Yellow green (154, 205, 50, 255)
     pub const YELLOW_GREEN: Color = Color::rgb8(154, 205, 50);
+}
+
+fn parse_color(s: &str) -> Option<Color> {
+    let s = s.trim();
+    if let Some(stripped) = s.strip_prefix('#') {
+        Some(color_from_4bit_hex(get_4bit_hex_channels(stripped)?))
+    } else {
+        Some(match s {
+            "aliceblue" => Color::ALICE_BLUE,
+            "antiquewhite" => Color::ANTIQUE_WHITE,
+            "aqua" => Color::AQUA,
+            "aquamarine" => Color::AQUAMARINE,
+            "azure" => Color::AZURE,
+            "beige" => Color::BEIGE,
+            "bisque" => Color::BISQUE,
+            "black" => Color::BLACK,
+            "blanchedalmond" => Color::BLANCHED_ALMOND,
+            "blue" => Color::BLUE,
+            "blueviolet" => Color::BLUE_VIOLET,
+            "brown" => Color::BROWN,
+            "burlywood" => Color::BURLYWOOD,
+            "cadetblue" => Color::CADET_BLUE,
+            "chartreuse" => Color::CHARTREUSE,
+            "chocolate" => Color::CHOCOLATE,
+            "coral" => Color::CORAL,
+            "cornflowerblue" => Color::CORNFLOWER_BLUE,
+            "cornsilk" => Color::CORNSILK,
+            "crimson" => Color::CRIMSON,
+            "cyan" => Color::CYAN,
+            "darkblue" => Color::DARK_BLUE,
+            "darkcyan" => Color::DARK_CYAN,
+            "darkgoldenrod" => Color::DARK_GOLDENROD,
+            "darkgray" => Color::DARK_GRAY,
+            "darkgreen" => Color::DARK_GREEN,
+            "darkkhaki" => Color::DARK_KHAKI,
+            "darkmagenta" => Color::DARK_MAGENTA,
+            "darkolivegreen" => Color::DARK_OLIVE_GREEN,
+            "darkorange" => Color::DARK_ORANGE,
+            "darkorchid" => Color::DARK_ORCHID,
+            "darkred" => Color::DARK_RED,
+            "darksalmon" => Color::DARK_SALMON,
+            "darkseagreen" => Color::DARK_SEA_GREEN,
+            "darkslateblue" => Color::DARK_SLATE_BLUE,
+            "darkslategray" => Color::DARK_SLATE_GRAY,
+            "darkturquoise" => Color::DARK_TURQUOISE,
+            "darkviolet" => Color::DARK_VIOLET,
+            "deeppink" => Color::DEEP_PINK,
+            "deepskyblue" => Color::DEEP_SKY_BLUE,
+            "dimgray" => Color::DIM_GRAY,
+            "dodgerblue" => Color::DODGER_BLUE,
+            "firebrick" => Color::FIREBRICK,
+            "floralwhite" => Color::FLORAL_WHITE,
+            "forestgreen" => Color::FOREST_GREEN,
+            "fuchsia" => Color::FUCHSIA,
+            "gainsboro" => Color::GAINSBORO,
+            "ghostwhite" => Color::GHOST_WHITE,
+            "gold" => Color::GOLD,
+            "goldenrod" => Color::GOLDENROD,
+            "gray" => Color::GRAY,
+            "green" => Color::GREEN,
+            "greenyellow" => Color::GREEN_YELLOW,
+            "honeydew" => Color::HONEYDEW,
+            "hotpink" => Color::HOT_PINK,
+            "indianred" => Color::INDIAN_RED,
+            "indigo" => Color::INDIGO,
+            "ivory" => Color::IVORY,
+            "khaki" => Color::KHAKI,
+            "lavender" => Color::LAVENDER,
+            "lavenderblush" => Color::LAVENDER_BLUSH,
+            "lawngreen" => Color::LAWN_GREEN,
+            "lemonchiffon" => Color::LEMON_CHIFFON,
+            "lightblue" => Color::LIGHT_BLUE,
+            "lightcoral" => Color::LIGHT_CORAL,
+            "lightcyan" => Color::LIGHT_CYAN,
+            "lightgoldenrodyellow" => Color::LIGHT_GOLDENROD_YELLOW,
+            "lightgray" => Color::LIGHT_GRAY,
+            "lightgreen" => Color::LIGHT_GREEN,
+            "lightpink" => Color::LIGHT_PINK,
+            "lightsalmon" => Color::LIGHT_SALMON,
+            "lightseagreen" => Color::LIGHT_SEA_GREEN,
+            "lightskyblue" => Color::LIGHT_SKY_BLUE,
+            "lightslategray" => Color::LIGHT_SLATE_GRAY,
+            "lightsteelblue" => Color::LIGHT_STEEL_BLUE,
+            "lightyellow" => Color::LIGHT_YELLOW,
+            "lime" => Color::LIME,
+            "limegreen" => Color::LIME_GREEN,
+            "linen" => Color::LINEN,
+            "magenta" => Color::MAGENTA,
+            "maroon" => Color::MAROON,
+            "mediumaquamarine" => Color::MEDIUM_AQUAMARINE,
+            "mediumblue" => Color::MEDIUM_BLUE,
+            "mediumorchid" => Color::MEDIUM_ORCHID,
+            "mediumpurple" => Color::MEDIUM_PURPLE,
+            "mediumseagreen" => Color::MEDIUM_SEA_GREEN,
+            "mediumslateblue" => Color::MEDIUM_SLATE_BLUE,
+            "mediumspringgreen" => Color::MEDIUM_SPRING_GREEN,
+            "mediumturquoise" => Color::MEDIUM_TURQUOISE,
+            "mediumvioletred" => Color::MEDIUM_VIOLET_RED,
+            "midnightblue" => Color::MIDNIGHT_BLUE,
+            "mintcream" => Color::MINT_CREAM,
+            "mistyrose" => Color::MISTY_ROSE,
+            "moccasin" => Color::MOCCASIN,
+            "navajowhite" => Color::NAVAJO_WHITE,
+            "navy" => Color::NAVY,
+            "oldlace" => Color::OLD_LACE,
+            "olive" => Color::OLIVE,
+            "olivedrab" => Color::OLIVE_DRAB,
+            "orange" => Color::ORANGE,
+            "orangered" => Color::ORANGE_RED,
+            "orchid" => Color::ORCHID,
+            "palegoldenrod" => Color::PALE_GOLDENROD,
+            "palegreen" => Color::PALE_GREEN,
+            "paleturquoise" => Color::PALE_TURQUOISE,
+            "palevioletred" => Color::PALE_VIOLET_RED,
+            "papayawhip" => Color::PAPAYA_WHIP,
+            "peachpuff" => Color::PEACH_PUFF,
+            "peru" => Color::PERU,
+            "pink" => Color::PINK,
+            "plum" => Color::PLUM,
+            "powderblue" => Color::POWDER_BLUE,
+            "purple" => Color::PURPLE,
+            "rebeccapurple" => Color::REBECCA_PURPLE,
+            "red" => Color::RED,
+            "rosybrown" => Color::ROSY_BROWN,
+            "royalblue" => Color::ROYAL_BLUE,
+            "saddlebrown" => Color::SADDLE_BROWN,
+            "salmon" => Color::SALMON,
+            "sandybrown" => Color::SANDY_BROWN,
+            "seagreen" => Color::SEA_GREEN,
+            "seashell" => Color::SEASHELL,
+            "sienna" => Color::SIENNA,
+            "silver" => Color::SILVER,
+            "skyblue" => Color::SKY_BLUE,
+            "slateblue" => Color::SLATE_BLUE,
+            "slategray" => Color::SLATE_GRAY,
+            "snow" => Color::SNOW,
+            "springgreen" => Color::SPRING_GREEN,
+            "steelblue" => Color::STEEL_BLUE,
+            "tan" => Color::TAN,
+            "teal" => Color::TEAL,
+            "thistle" => Color::THISTLE,
+            "tomato" => Color::TOMATO,
+            "transparent" => Color::TRANSPARENT,
+            "turquoise" => Color::TURQUOISE,
+            "violet" => Color::VIOLET,
+            "wheat" => Color::WHEAT,
+            "white" => Color::WHITE,
+            "whitesmoke" => Color::WHITE_SMOKE,
+            "yellow" => Color::YELLOW,
+            "yellowgreen" => Color::YELLOW_GREEN,
+            _ => return None,
+        })
+    }
+}
+
+// The following hex color parsing code taken from piet:
+
+const fn get_4bit_hex_channels(hex_str: &str) -> Option<[u8; 8]> {
+    let mut four_bit_channels = match hex_str.as_bytes() {
+        &[b'#', r, g, b] | &[r, g, b] => [r, r, g, g, b, b, b'f', b'f'],
+        &[b'#', r, g, b, a] | &[r, g, b, a] => [r, r, g, g, b, b, a, a],
+        &[b'#', r0, r1, g0, g1, b0, b1] | &[r0, r1, g0, g1, b0, b1] => {
+            [r0, r1, g0, g1, b0, b1, b'f', b'f']
+        }
+        &[b'#', r0, r1, g0, g1, b0, b1, a0, a1] | &[r0, r1, g0, g1, b0, b1, a0, a1] => {
+            [r0, r1, g0, g1, b0, b1, a0, a1]
+        }
+        _ => return None,
+    };
+
+    // convert to hex in-place
+    // this is written without a for loop to satisfy `const`
+    let mut i = 0;
+    while i < four_bit_channels.len() {
+        let ascii = four_bit_channels[i];
+        let as_hex = match hex_from_ascii_byte(ascii) {
+            Ok(hex) => hex,
+            Err(_) => return None,
+        };
+        four_bit_channels[i] = as_hex;
+        i += 1;
+    }
+    Some(four_bit_channels)
+}
+
+fn color_from_4bit_hex(components: [u8; 8]) -> Color {
+    let [r0, r1, g0, g1, b0, b1, a0, a1] = components;
+    Color::rgba8(r0 << 4 | r1, g0 << 4 | g1, b0 << 4 | b1, a0 << 4 | a1)
+}
+
+const fn hex_from_ascii_byte(b: u8) -> Result<u8, u8> {
+    match b {
+        b'0'..=b'9' => Ok(b - b'0'),
+        b'A'..=b'F' => Ok(b - b'A' + 10),
+        b'a'..=b'f' => Ok(b - b'a' + 10),
+        _ => Err(b),
+    }
 }
