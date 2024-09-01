@@ -130,3 +130,20 @@ impl From<Srgb<u8>> for Color {
         Self::from(value.into_linear::<f32>().with_alpha(1.0).into_format())
     }
 }
+
+impl From<[f32; 4]> for Color {
+    fn from(value: [f32; 4]) -> Self {
+        Self {
+            red: value[0],
+            green: value[1],
+            blue: value[2],
+            alpha: value[3],
+        }
+    }
+}
+
+impl From<Color> for [f32; 4] {
+    fn from(value: Color) -> Self {
+        [value.red, value.green, value.blue, value.alpha]
+    }
+}
