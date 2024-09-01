@@ -26,9 +26,10 @@ features = ["serde"]
 
 [dependencies]
 bytemuck = { version = "1", optional = true, features = ["derive"] }
+fast-srgb8 = "1"
 # NOTE: Make sure to keep this in sync with the version badge in README.md
 kurbo = { version = "0.11.0", default-features = false }
-palette = { version = "0.7", default-features = false, features = ["named"] }
+palette = { version = "0.7", default-features = false }
 smallvec = "1.13.2"
 
 [dependencies.serde]

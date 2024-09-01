@@ -35,9 +35,3 @@ pub use kurbo;
 /// Re-export of `palette` crate for color management.
 pub use palette;
 pub use style::{Fill, Style, StyleRef};
-
-/// Useful color constants.
-pub mod colors {
-    #[doc(inline)]
-    pub use palette::named::*;
-}
