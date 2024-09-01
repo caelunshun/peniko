@@ -62,6 +62,17 @@ impl Color {
             ..self
         }
     }
+
+    /// Premultiplies the alpha channel.
+    #[must_use]
+    pub fn premultiply(self) -> Self {
+        Self {
+            red: self.red * self.alpha,
+            green: self.green * self.alpha,
+            blue: self.blue * self.alpha,
+            alpha: self.alpha,
+        }
+    }
 }
 
 impl From<LinSrgba> for Color {
