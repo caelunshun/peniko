@@ -12,7 +12,9 @@ use super::{Blob, Extend};
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
 pub enum Format {
-    /// 32-bit RGBA with 8-bit channels.
+    /// 32-bit RGBA with 8-bit channels, encoded
+    /// in the sRGB color space with the sRGB
+    /// transfer function.
     Rgba8,
 }
 

@@ -6,10 +6,11 @@ use super::{Color, Extend};
 use kurbo::Point;
 use smallvec::SmallVec;
 
+use core::cmp::Ordering;
 use core::hash::{Hash, Hasher};
 
 /// Offset and color of a transition point in a [gradient](Gradient).
-#[derive(Copy, Clone, PartialOrd, Default, Debug)]
+#[derive(Copy, Clone, Default, Debug)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct ColorStop {
     /// Normalized offset of the stop.
@@ -18,11 +19,24 @@ pub struct ColorStop {
     pub color: Color,
 }
 
+impl PartialOrd for ColorStop {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.offset.partial_cmp(&other.offset)
+    }
+}
+
 impl Hash for ColorStop {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.offset.to_bits().hash(state);
-        self.color.hash(state);
+        hash_color(self.color, state);
     }
+}
+
+fn hash_color(color: Color, state: &mut impl Hasher) {
+    color.red.to_bits().hash(state);
+    color.green.to_bits().hash(state);
+    color.blue.to_bits().hash(state);
+    color.alpha.to_bits().hash(state);
 }
 
 // Override PartialEq to use to_bits for the offset to match with the Hash impl
@@ -41,7 +55,11 @@ impl ColorStop {
     pub fn with_alpha_factor(self, alpha: f32) -> Self {
         Self {
             offset: self.offset,
-            color: self.color.with_alpha_factor(alpha),
+            color: {
+                let mut color = self.color;
+                color.alpha *= alpha;
+                color
+            },
         }
     }
 }

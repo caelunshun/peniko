@@ -17,20 +17,26 @@
 mod blend;
 mod blob;
 mod brush;
-mod color;
 mod font;
 mod gradient;
 mod image;
 mod style;
 
-/// Re-export of the kurbo 2D curve library.
-pub use kurbo;
-
 pub use blend::{BlendMode, Compose, Mix};
 pub use blob::{Blob, WeakBlob};
 pub use brush::{Brush, BrushRef, Extend};
-pub use color::Color;
 pub use font::Font;
 pub use gradient::{ColorStop, ColorStops, ColorStopsSource, Gradient, GradientKind};
 pub use image::{Format, Image};
+/// Re-export of the kurbo 2D curve library.
+pub use kurbo;
+/// Re-export of `palette` crate for color management.
+pub use palette;
+use palette::LinSrgba;
 pub use style::{Fill, Style, StyleRef};
+
+/// General-purpose color type. `LinSrgba`
+/// uses a 32-bit float per channel, which ensures
+/// we maintain as much precision as possible before rendering
+/// to accommodate a wide range of output color spaces.
+pub type Color = LinSrgba;
