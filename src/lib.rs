@@ -39,4 +39,7 @@ pub use style::{Fill, Style, StyleRef};
 /// uses a 32-bit float per channel, which ensures
 /// we maintain as much precision as possible before rendering
 /// to accommodate a wide range of output color spaces.
+///
+/// Unless otherwise stated, `peniko` and crates using it
+/// expect colors to be provided unpremultiplied.
 pub type Color = LinSrgba;
