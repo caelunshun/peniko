@@ -73,6 +73,21 @@ impl Color {
             alpha: self.alpha,
         }
     }
+
+    /// Performs linear interpolation.
+    #[must_use]
+    pub fn lerp(self, other: Self, t: f32) -> Self {
+        Self {
+            red: lerp(self.red, other.red, t),
+            green: lerp(self.green, other.green, t),
+            blue: lerp(self.blue, other.blue, t),
+            alpha: lerp(self.alpha, other.alpha, t),
+        }
+    }
+}
+
+fn lerp(a: f32, b: f32, t: f32) -> f32 {
+    a * (1.0 - t) + b * t
 }
 
 impl From<LinSrgba> for Color {
