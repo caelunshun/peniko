@@ -19,11 +19,13 @@ std = ["kurbo/std", "palette/std"]
 libm = ["kurbo/libm", "palette/libm"]
 mint = ["kurbo/mint"]
 serde = ["smallvec/serde", "kurbo/serde", "palette/serializing", "dep:serde_bytes", "dep:serde"]
+bytemuck = ["dep:bytemuck"]
 
 [package.metadata.docs.rs]
 features = ["serde"]
 
 [dependencies]
+bytemuck = { version = "1", optional = true, features = ["derive"] }
 # NOTE: Make sure to keep this in sync with the version badge in README.md
 kurbo = { version = "0.11.0", default-features = false }
 palette = { version = "0.7", default-features = false, features = ["named"] }

@@ -4,6 +4,8 @@ use palette::{FromColor, LinSrgb, LinSrgba, Srgb, Srgba, WithAlpha};
 /// Encoded as linear sRGB. Alpha is not premultiplied.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "bytemuck", derive(bytemuck::Pod, bytemuck::Zeroable))]
+#[repr(C)]
 pub struct Color {
     /// Red component. Linear.
     pub red: f32,
