@@ -62,6 +62,65 @@ impl Color {
         }
     }
 
+    /// Create a color from a CIEL\*a\*b\* polar (also known as CIE HCL)
+    /// specification.
+    ///
+    /// The `h` parameter is an angle in degrees, with 0 roughly magenta, 90
+    /// roughly yellow, 180 roughly cyan, and 270 roughly blue. The `l`
+    /// parameter is perceptual luminance, with 0 black and 100 white.
+    /// The `c` parameter is a chrominance concentration, with 0 grayscale
+    /// and a nominal maximum of 127.
+    #[must_use]
+    pub fn hlc(h: f64, l: f64, c: f64) -> Self {
+        Self::hlca(h, l, c, 1.0)
+    }
+
+    /// Create a color from a CIEL\*a\*b\* polar specification and alpha.
+    ///
+    /// The `a` value represents alpha in the range `0.0` to `1.0`.
+    #[allow(non_snake_case)]
+    #[allow(clippy::many_single_char_names)]
+    #[allow(clippy::unreadable_literal)]
+    #[must_use]
+    pub fn hlca(h: f64, l: f64, c: f64, a: f64) -> Color {
+        let alpha = a;
+        // The reverse transformation from Lab to XYZ, see
+        // https://en.wikipedia.org/wiki/CIELAB_color_space
+        fn f_inv(t: f64) -> f64 {
+            let d = 6. / 29.;
+            if t > d {
+                t.powi(3)
+            } else {
+                3. * d * d * (t - 4. / 29.)
+            }
+        }
+        let th = h * (core::f64::consts::PI / 180.);
+        let a = c * th.cos();
+        let b = c * th.sin();
+        let ll = (l + 16.) * (1. / 116.);
+        // Produce raw XYZ values
+        let X = f_inv(ll + a * (1. / 500.));
+        let Y = f_inv(ll);
+        let Z = f_inv(ll - b * (1. / 200.));
+        // This matrix is the concatenation of three sources.
+        // First, the white point is taken to be ICC standard D50, so
+        // the diagonal matrix of [0.9642, 1, 0.8249]. Note that there
+        // is some controversy around this value. However, it matches
+        // the other matrices, thus minimizing chroma error.
+        //
+        // Second, an adaption matrix from D50 to D65. This is the
+        // inverse of the recommended D50 to D65 adaptation matrix
+        // from the W3C sRGB spec:
+        // https://www.w3.org/Graphics/Color/srgb
+        //
+        // Finally, the conversion from XYZ to linear sRGB values,
+        // also taken from the W3C sRGB spec.
+        let r_lin = 3.02172918 * X - 1.61692294 * Y - 0.40480625 * Z;
+        let g_lin = -0.94339358 * X + 1.91584267 * Y + 0.02755094 * Z;
+        let b_lin = 0.06945666 * X - 0.22903204 * Y + 1.15957526 * Z;
+        Color::rgba(r_lin as f32, g_lin as f32, b_lin as f32, alpha as f32)
+    }
+
     /// Multiplies alpha by the given factor.
     #[must_use]
     pub fn with_alpha_factor(self, alpha: f32) -> Self {
